@@ -1,0 +1,11 @@
+properties:
+  configuration:
+    ingress:
+      additionalPortMappings:
+      - targetPort: 3001
+        external: false
+      - targetPort: 3002
+        external: false
+      - targetPort: 3003
+        exposedPort: 8003
+        external: false
