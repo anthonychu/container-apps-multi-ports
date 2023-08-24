@@ -4,12 +4,14 @@
 
 ```bash
 # deploy an app that listens to multiple ports
-az containerapp up -n multi-port-app -g $RESOURCE_GROUP --environment $ENVIRONMENT --env-vars 'PORTS=3000,3001,3002,3003' --source .
+az containerapp up -n multi-port-app -g $RESOURCE_GROUP --environment $ENVIRONMENT \
+    --env-vars 'PORTS=3000,3001,3002,3003' --source .
 
 # deploy an app to test the other app
 az containerapp up -n multi-port-tester -g $RESOURCE_GROUP --environment $ENVIRONMENT --source .
 
-# update the first app to add port mappings (need to use REST API for now because az containerapp update is still using older API version)
+# update the first app to add port mappings
+# (need to use REST API for now because az containerapp update is still using older API version)
 
 # get the id of the first app
 MULTI_PORT_APP_ID=`az containerapp show -n multi-port-app -g $RESOURCE_GROUP --query id -o tsv`
@@ -20,7 +22,8 @@ az rest -m PATCH -u "$MULTI_PORT_APP_ID?api-version=2023-05-02-preview" --body @
 #### Test it
 
 ```bash
-# if this doesn't work, the tester app might be scaled down, hit its public endpoint to scale it up
+# if this doesn't work, the tester app might be scaled down, 
+# hit its public endpoint to scale it up
 az containerapp exec -n multi-port-tester -g $RESOURCE_GROUP
 
 # once inside the container, use curl to test the other app
